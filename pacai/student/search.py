@@ -22,51 +22,60 @@ def depthFirstSearch(problem):
     ```
     """
 
+    # DFS is LIFO so set it to a stack
     frontier = Stack()
-    visited_states = set()
+    
+    visited = set()
+    
     frontier.push((problem.startingState(), []))
 
+    # Loop until there are no more logical adjacent squares to explore
     while not frontier.isEmpty():
-        current_state, path = frontier.pop()
+        current, path = frontier.pop()
 
-        # if current_state in visited_states:
-        #     continue  # Skip already visited states
+        # Update visited states so that there is not a repeat check
+        visited.add(current)
 
-        visited_states.add(current_state)
-
-        if problem.isGoal(current_state):
+        # No need to continue if the goal has been reached
+        if problem.isGoal(current):
             print(f'The final path to the food was: {path}')
             return path
 
-        for successor, action, _ in problem.successorStates(current_state):
-            if successor not in visited_states:
+        # As long as the goal hasn't been reached, move to the next state
+        for successor, action, _ in problem.successorStates(current):
+            if successor not in visited:
+                # Go to the next state by putting its successor in the stack, update path
                 frontier.push((successor, path + [action]))
 
     raise NotImplementedError("No solution found.")
 
-
-
-
 def breadthFirstSearch(problem):
-    
+    """
+    Search the shallowest nodes in the search tree first. [p 81]
+    """
+    # BFS is FIFO so set it to a queue
     frontier = Queue()
-    visited_states = set()
+    visited = set()
+    
+    # Initialize queue at initial state and append path along the way, begins empty
     frontier.push((problem.startingState(), []))
 
+    # Loop until there are no more logical adjacent squares to explore
     while not frontier.isEmpty():
-        current_state, path = frontier.pop()
-
-        # if current_state in visited_states:
-        #     continue  # Skip already visited states
-
-        visited_states.add(current_state)
-
-        if problem.isGoal(current_state):
-            print(f'The final path to the food was: {path}')
+        current, path = frontier.pop()
+    
+        # Update visited states so that there is not a repeat check
+        visited.add(current)
+    
+        # No need to continue if the goal has been reached
+        if problem.isGoal(current):
+           # print(f'The final path to the food was: {path}')
             return path
-
-        for successor, action, _ in problem.successorStates(current_state):
-            if successor not in visited_states:
+        
+        # As long as the goal hasn't been reached, move to the next state
+        for successor, action, _ in problem.successorStates(current):
+            if successor not in visited:
+                # Go to the next state by putting its successor in the queue, update path
                 frontier.push((successor, path + [action]))
 
     raise NotImplementedError("No solution found.")
@@ -76,28 +85,38 @@ def uniformCostSearch(problem):
     Search the node of least total cost first.
     """
 
+    # Uniform cost search uses the weights in the graph so it is a priority queue
     frontier = PriorityQueue()
-    visited_states = {}
+    
+    # Need to track lowest cost to each state visited
+    visited = {}
     frontier.push((problem.startingState(), []), 0)
 
+    # Loop until there are no more logical adjacent squares to explore
     while not frontier.isEmpty():
-        current_state, path = frontier.pop()
+        current, path = frontier.pop()
 
-        # if current_state in visited_states:
-        #     continue  # Skip already visited states
-
-        if problem.isGoal(current_state):
+        # No need to continue if the goal has been reached
+        if problem.isGoal(current):
             print(f'The final path to the food was: {path}')
             return path
 
+        # Calculate the cost to the next state in order to determine the successor
         current_cost = problem.actionsCost(path)
         
-        visited_states[current_state] = current_cost
-        
-        for successor, action, _ in problem.successorStates(current_state):
-            this_path = path +[action]
+        visited[current] = current_cost
+    
+        # As long as the goal hasn't been reached, move to the next state
+        for successor, action, _ in problem.successorStates(current):
+    
+            # Update the path and calculate the total cost
+            this_path = path + [action]
             this_cost = problem.actionsCost(this_path)
-            if successor not in visited_states or this_cost < visited_states[successor]:
+            
+            # Check whether to continue on the path or go down a more cost effective route
+            if successor not in visited or this_cost < visited[successor]:
+                
+                # Go to the next state by putting its successor in the queue, update path
                 frontier.push((successor, this_path), this_cost)
 
     return []
@@ -106,27 +125,35 @@ def aStarSearch(problem, heuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
-
+    
+    # A* search uses the heuristic in the graph so it is a priority queue
     frontier = PriorityQueue()
     check_states = set()
 
+    # Account for the distance from the start and the goal state together
     frontier.push((problem.startingState(), [], 0), heuristic(problem.startingState(), problem))
 
+    # Loop until there are no more logical adjacent squares to explore
     while not frontier.isEmpty():
-        current_state, path, cost = frontier.pop()
+        current, path, cost = frontier.pop()
 
-        if problem.isGoal(current_state):
+        # No need to continue if the goal has been reached
+        if problem.isGoal(current):
             print(f'The final path to win was: {path}')
             return path
         
-        check_states.add(current_state)
+        check_states.add(current)
 
-        for successor, action, step_cost in problem.successorStates(current_state):
+        # As long as the goal hasn't been reached, move to the next state
+        for successor, action, step_cost in problem.successorStates(current):
+    
+            # Calculate the cost to move to the next state 
+            # + the distance from goal state and minimize the sum
             successor_cost = cost + step_cost
             successor_eval = successor_cost + heuristic(successor, problem)
 
             if not any(successor == check_state for check_state in check_states):
+    
+                # Go to the next state by putting its successor in the queue, update path
                 frontier.push((successor, path + [action], successor_cost), successor_eval)
     return []
-
-

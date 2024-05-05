@@ -27,6 +27,9 @@ def maze(position1, position2, gameState):
 
     x1, y1 = position1
     x2, y2 = position2
+    
+    x2 = int(x2)
+    y2 = int(y2)
 
     walls = gameState.getWalls()
 
