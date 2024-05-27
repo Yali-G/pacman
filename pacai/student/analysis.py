@@ -11,50 +11,53 @@ NOT_POSSIBLE = None
 
 def question2():
     """
-    [Enter a description of what you did here.]
+    No randomality, always goes the optimal path
     """
 
     answerDiscount = 0.9
-    answerNoise = 0.2
+    answerNoise = 0
 
     return answerDiscount, answerNoise
 
 def question3a():
     """
-    [Enter a description of what you did here.]
+    It costs more to not go in a good direction
+    Some randomness involved
     """
 
     answerDiscount = 0.9
-    answerNoise = 0.2
-    answerLivingReward = 0.0
+    answerNoise = 0.31
+    answerLivingReward = -1.1
 
     return answerDiscount, answerNoise, answerLivingReward
 
 def question3b():
     """
-    [Enter a description of what you did here.]
+    The answer is more heavily discounted
+    The living reward is lower
     """
 
-    answerDiscount = 0.9
+    answerDiscount = 0.5
     answerNoise = 0.2
-    answerLivingReward = 0.0
+    answerLivingReward = -1
 
     return answerDiscount, answerNoise, answerLivingReward
 
 def question3c():
     """
-    [Enter a description of what you did here.]
+    It costs more to live
     """
 
     answerDiscount = 0.9
     answerNoise = 0.2
-    answerLivingReward = 0.0
+    answerLivingReward = -1
 
     return answerDiscount, answerNoise, answerLivingReward
 
 def question3d():
     """
-    [Enter a description of what you did here.]
+    Let the agent roam around 
+    No living expense
     """
 
     answerDiscount = 0.9
@@ -65,24 +68,24 @@ def question3d():
 
 def question3e():
     """
-    [Enter a description of what you did here.]
+    A lot of randomness and expensive to live
+    Meaning it will scope out and
+    figure out the right moves
     """
 
     answerDiscount = 0.9
-    answerNoise = 0.2
-    answerLivingReward = 0.0
+    answerNoise = 1
+    answerLivingReward = -2
 
     return answerDiscount, answerNoise, answerLivingReward
 
 def question6():
     """
-    [Enter a description of what you did here.]
+    Its not possible to find the optimal
+    policy in only 50 episodes
     """
 
-    answerEpsilon = 0.3
-    answerLearningRate = 0.5
-
-    return answerEpsilon, answerLearningRate
+    return NOT_POSSIBLE
 
 if __name__ == '__main__':
     questions = [
